@@ -49,6 +49,7 @@ Then to run the app locally,
 ```
 $ bundle install
 $ yarn install
+$ cp config/database.yml.example config/database.yml
 $ rake dev:setup
 $ heroku local -f Procfile.dev
 # if you chose the local route, then you are good to go on:
@@ -67,6 +68,10 @@ $ View `seeds.rb` file for login email and password to use while working in deve
 ### ... with Docker!
 
 If you opted to install Docker Desktop, `docker-compose up -d` will run dependency services like PostgreSQL (the database), Redis (the job queue), and Mailcatcher (a fake SMTP mail server for testing). Services will run in the background. NOTE: these services will attempt to use some commonly used ports (e.g. 5432 for PostgreSQL) on localhost, so if you see errors about conflicting ports, you may have the corresponding service already running elsewhere on your development host.
+
+If you have a redis instance running already, you can also see errors
+about conflicting ports so you can run `brew services stop redis` to
+stop redis.
 
 ```
 $ docker-compose up -d
@@ -118,6 +123,30 @@ mailcatcher_1  | ==> smtp://0.0.0.0:1025
 mailcatcher_1  | /usr/lib/ruby/gems/2.5.0/gems/thin-1.5.1/lib/thin/server.rb:104: warning: constant ::Fixnum is deprecated
 mailcatcher_1  | ==> http://0.0.0.0:1080/
 ```
+
+If you tried `docker compose start` and run into errors such as:
+```
+Creating network "voices-of-consent_default" with the default driver
+Pulling db (postgres:11.4)...
+Traceback (most recent call last):
+  File "docker-compose", line 6, in <module>
+  File "compose/cli/main.py", line 71, in main
+  File "compose/cli/main.py", line 127, in perform_command
+  File "compose/cli/main.py", line 1052, in up
+  File "compose/cli/main.py", line 1048, in up
+  File "compose/project.py", line 471, in up
+  File "compose/service.py", line 346, in ensure_image_exists
+  File "compose/service.py", line 1183, in pull
+  File "site-packages/docker/api/image.py", line 380, in pull
+  File "site-packages/docker/auth.py", line 48, in get_config_header
+  File "site-packages/docker/auth.py", line 96, in resolve_authconfig
+  File "site-packages/docker/auth.py", line 127, in _resolve_authconfig_credstore
+  File "site-packages/dockerpycreds/store.py", line 25, in __init__
+dockerpycreds.errors.InitializationError: docker-credential-desktop not installed or not available in PATH
+[13496] Failed to execute script docker-compose
+```
+Then try running this command to replace “desktop” in your `.docker/config.json` with `osxkeychain`:
+```sed -i~ 's/"desktop"/"osxkeychain"/g' ~/.docker/config.json```
 
 ### ... with individually installed services
 
