@@ -69,7 +69,7 @@ $ View `seeds.rb` file for login email and password to use while working in deve
 
 If you opted to install Docker Desktop, `docker-compose up -d` will run dependency services like PostgreSQL (the database), Redis (the job queue), and Mailcatcher (a fake SMTP mail server for testing). Services will run in the background. NOTE: these services will attempt to use some commonly used ports (e.g. 5432 for PostgreSQL) on localhost, so if you see errors about conflicting ports, you may have the corresponding service already running elsewhere on your development host.
 
-If you have a redis instance running already, you can also see errors
+If you have a redis instance running already, you may also see errors
 about conflicting ports so you can run `brew services stop redis` to
 stop redis.
 
